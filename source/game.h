@@ -1,0 +1,15 @@
+void shrewmice_clean();
+void shrewmouse_hit(int i, int j);
+void shrewmouse_create(int i, int j) ;
+void shrewmice_update() ;
+void print_table_new();
+void start_game(char (*p)[31]);
+void set_table(char (*p)[31]);
+void print_table(char (*p)[31]);
+void clean(char (*p)[31]);
+void blank(char (*p)[31]);
+int hit_new(char k);
+void run1(int t,int n);
+void appear(char(*p)[31], int n);
+int hit(char (*p)[31],char k);
+void face(char (*p)[31]);

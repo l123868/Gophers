@@ -1,83 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <conio.h>
+#include <windows.h>
 #include "game.h"
-Shrewmice m;
-void create_board(char **&p)
-{
-    p = (char**)malloc(sizeof(char*) * m.size);
-    for (int i = 0; i < m.size; i+=1)
-        p[i] = (char*)malloc(sizeof(char) * (m.size*10+1));
-}
-void destroy_board(char **&p)
-{
-    for (int j = 0; j < m.size*10+1; j+=1)
-        free(p[j]);
-    free(p);
-}
-void Shrewmice::create_Shrewmice()
-{
-    has_shrewmouse = (bool**)malloc(sizeof(bool*) * size);
-    for (int i = 0; i < size; i+=1)
-        has_shrewmouse[i] = (bool*)malloc(sizeof(bool) * size);
 
-    is_alive = (bool**)malloc(sizeof(bool*) * size);
-    for (int i = 0; i < size; i+=1)
-        is_alive[i] = (bool*)malloc(sizeof(bool) * size);
+bool has_shrewmouse[3][3];
+bool is_alive[3][3];
+int alive_time[3][3];
+int dead_time[3][3];
+int appearance[3][3];
 
-    alive_time = (int**)malloc(sizeof(int*) * size);
-    for (int i = 0; i < size; i+=1)
-        alive_time[i] = (int*)malloc(sizeof(int) * size);
+// å„ç¨®è¡¨æƒ…
+const char* appearances[6] = {"AwA", "OAO", "O_O", "=A=","=w=","OoO"};
 
-    dead_time = (int**)malloc(sizeof(int*) * size);
-    for (int i = 0; i < size; i+=1)
-        dead_time[i] = (int*)malloc(sizeof(int) * size);
-
-    appearance = (int**)malloc(sizeof(int*) * size);
-    for (int i = 0; i < size; i+=1)
-        appearance[i] = (int*)malloc(sizeof(int) * size);
-}
-// ¦UºØªí±¡
-
-void Shrewmice::shrewmice_clean()
-{
-    for (int i = 0; i < size; i+=1)
-        for (int j = 0; j < size; j+=1)
+void shrewmice_clean() {
+    for (int i = 0; i < 3; i+=1)
+        for (int j = 0; j < 3; j+=1)
             has_shrewmouse[i][j] = false;
 }
 
-void Shrewmice::shrewmouse_hit(int i,int j)
-{
-    is_alive[i][j] = false; // ¦º±¼
-    dead_time[i][j] = 0;    // ¦º¦h¤[¤F¡A±±¨îQwQÅã¥Ü´X¦^¦X
+void shrewmouse_hit(int i, int j) {
+    is_alive[i][j] = false; // æ­»æ‰
+    dead_time[i][j] = 0;    // æ­»å¤šä¹…äº†ï¼Œæ§åˆ¶QwQé¡¯ç¤ºå¹¾å›åˆ
 }
 
-void Shrewmice::shrewmouse_create(int i, int j)
-{
+void shrewmouse_create(int i, int j) {
     has_shrewmouse[i][j] = true;
     is_alive[i][j] = true;
-    alive_time[i][j] = 0;   // ¨e¬¡¤F¦h¤[
+    alive_time[i][j] = 0;   // ç‰ æ´»äº†å¤šä¹…
     appearance[i][j] = rand()%6;
 }
 
-void Shrewmice::shrewmice_update()
-{
-    // §ó·s¥ş³¡ªº¦a¹«
-    for (int i = 0; i < size; i+=1)
-    {
-        for (int j = 0; j < size; j+=1)
-        {
-            // ¦pªG¦³¦a¹«¦b (i,j)
-            if (has_shrewmouse[i][j])
-            {
-                if (is_alive[i][j])
-                {
+void shrewmice_update() {
+    // æ›´æ–°å…¨éƒ¨çš„åœ°é¼ 
+    for (int i = 0; i < 3; i+=1) {
+        for (int j = 0; j < 3; j+=1) {
+            // å¦‚æœæœ‰åœ°é¼ åœ¨ (i,j)
+            if (has_shrewmouse[i][j]) {
+                if (is_alive[i][j]) {
                     alive_time[i][j]+=1;
-                    // 6¦^¦X«á®ø¥¢
+                    // 6å›åˆå¾Œæ¶ˆå¤±
                     if (alive_time[i][j] > 6)
                         has_shrewmouse[i][j] = false;
-                }
-                else
-                {
+                } else {
                     dead_time[i][j]+=1;
-                    // 2¦^¦X«á®ø¥¢
+                    // 2å›åˆå¾Œæ¶ˆå¤±
                     if (dead_time[i][j] > 2)
                         has_shrewmouse[i][j] = false;
                 }
@@ -86,31 +54,34 @@ void Shrewmice::shrewmice_update()
     }
 }
 
-void print_table_new(Shrewmice m)
+void print_table_new()
 {
-    //¦L¥X½L­±
+    //å°å‡ºç›¤é¢
     int i,j,k;
-    char **p;
-    create_board(p);
+    char p[3][31];
     blank(p);
     face(p);
     system("cls");
-    for(i=0; i<m.size; i+=1)
-        for(int j=0; j<m.size; j+=1)
-            p[i][j*10+10]='|';
-    for(i=0; i<m.size*10+1; i+=1)
+    for(i=0; i<3; i+=1)
+    {
+        p[i][0]='|';
+        p[i][10]='|';
+        p[i][20]='|';
+        p[i][30]='|';
+    }
+    for(i=0; i<31; i+=1)
     {
         printf("_");
     }
     printf("\n");
-    for(i=0; i<m.size; i+=1)
+    for(i=0; i<3; i+=1)
     {
-        for(j=0; j<m.size*10+1; j+=1)
+        for(j=0; j<31; j+=1)
         {
             printf("%c",p[i][j]);
         }
         printf("\n");
-        for(k=0; k<m.size*10+1; k+=1)
+        for(k=0; k<31; k+=1)
         {
             printf("_");
         }
@@ -118,29 +89,25 @@ void print_table_new(Shrewmice m)
     }
 }
 
-void start_game(char **&p)
+void start_game(char (*p)[31])
 {
-    int time,num;
-    system("cls");
-    printf("§A·Q­n¦h¤jªº½L­±¡H...>\n");
-    scanf("%d", &m.size);
-    system("cls");
-    printf("§A·Qª±´X¦^¦X¡H...>\n");
-    scanf("%d", &time);
-    system("cls");
-    printf("³Ì¦h¤@¦¸¥X²{´X°¦¦a¹«¡H...>\n");
-    scanf("%d", &num);
-    create_board(p);
-    blank(p);
-    set_table(p);
-    print_table(p);
-    clean(p);
-    run1(time,num);
+        int time,num;
+        system("cls");
+        printf("ä½ æƒ³ç©å¹¾å›åˆï¼Ÿ...>\n");
+        scanf("%d", &time);
+        system("cls");
+        printf("æœ€å¤šä¸€æ¬¡å‡ºç¾å¹¾éš»åœ°é¼ ï¼Ÿ...>\n");
+        scanf("%d", &num);
+        blank(p);
+        set_table(p);
+        print_table(p);
+        clean(p);
+        run1(time,num);
 }
-void set_table(char **&p)
+void set_table(char (*p)[31])
 {
     int i,j,k;
-    //¶ñ¤J¼Æ¦r
+    //å¡«å…¥æ•¸å­—
     p[0][5]='7';
     p[0][15]='8';
     p[0][25]='9';
@@ -153,9 +120,9 @@ void set_table(char **&p)
     p[2][15]='2';
     p[2][25]='3';
 }
-void print_table(char **&p)
+void print_table(char (*p)[31])
 {
-    //¦L¥X½L­±
+    //å°å‡ºç›¤é¢
     int i,j,k;
     system("cls");
     for(i=0; i<3; i+=1)
@@ -184,9 +151,9 @@ void print_table(char **&p)
         printf("\n");
     }
 }
-void clean(char **&p)
+void clean(char (*p)[31])
 {
-    //make wholes
+    //æŒ–æ´
     char ch;
     do
     {
@@ -224,18 +191,18 @@ void clean(char **&p)
     }
     while(1);
 }
-void blank(char **&p)
+void blank(char (*p)[31])
 {
-    //make the board blank
-    for(int i=0; i<m.size; i+=1)
+    //æ¸…ç©ºç›¤é¢
+    for(int i=0; i<3; i+=1)
     {
-        for(int j=0; j<(m.size*10+1); j+=1)
+        for(int j=0; j<31; j+=1)
         {
             p[i][j]=' ';
         }
     }
 }
-int Shrewmice::hit_new(char k)
+int hit_new(char k)
 {
     if(k=='7'&&has_shrewmouse[0][0]&&is_alive[0][0])
     {
@@ -290,32 +257,30 @@ int Shrewmice::hit_new(char k)
 void run1(int t,int n)
 {
     int i=t*2,score=0,live;
-    m.shrewmice_clean();
+    shrewmice_clean();
     do
     {
-        m.shrewmice_update();
+        shrewmice_update();
         live=0;
         for (int i=0; i<3; i+=1)
             for (int j=0; j<3; j+=1)
-                if (m.has_shrewmouse[i][j])
+                if (has_shrewmouse[i][j])
                     live+=1;
-        while (live < n)
-        {
+        while (live < n) {
             int x=rand()%3;
             int y=rand()%3;
-            if (!m.has_shrewmouse[x][y])
-            {
-                m.shrewmouse_create(x,y);
+            if (!has_shrewmouse[x][y]) {
+                shrewmouse_create(x,y);
                 live+=1;
             }
         }
-        print_table_new(m);
+        print_table_new();
         char k;
         Sleep(500);
         if(kbhit())
         {
             k=getch();
-            if(m.hit_new(k))
+            if(hit_new(k))
             {
                 score+=1;
             }
@@ -323,11 +288,11 @@ void run1(int t,int n)
         i-=1;
     }
     while(i>0);
-    printf("§A¥´¦º¤F%d°¦¦a¹«\n", score);
+    printf("ä½ æˆåŠŸæ‰“æ­»%déš»åœ°é¼ ï¼\n", score);
 }
-void appear(char **p, int n)
+void appear(char(*p)[31], int n)
 {
-    //¥X²{¦a¹«ªº¦a¤è
+    //å‡ºç¾åœ°é¼ çš„åœ°æ–¹
     int row[3]= {0,1,2},col[3]= {5,15,25},x,y;
     for(int i=0; i<n; i+=1)
     {
@@ -389,33 +354,29 @@ int hit(char (*p)[31],char k)
         return 0;
     }
 }
-void face(char **&p)
+void face(char (*p)[31])
 {
-    int *col;
-    col=(int*)malloc(sizeof(int)*m.size);
-    for(int i=0; i<m.size; i+=1)
-        col[i]= (i+1)*5;
-    for(int i=0; i<m.size; i+=1)
+    int row[3]= {0,1,2},col[3]= {5,15,25};
+    for(int i=0; i<3; i+=1)
     {
-        for (int j=0; j<m.size; j+=1)
+        for (int j=0; j<3; j+=1)
         {
-            if (m.has_shrewmouse[i][j])
+            if (has_shrewmouse[i][j])
             {
-                if (m.is_alive[i][j])
+                if (is_alive[i][j])
                 {
                     for (int k=0; k<3; k+=1)
                     {
-                        p[i][col[j]-1+k] = m.appearances[m.appearance[i][j]][k];
+                        p[row[i]][col[j]-1+k] = appearances[appearance[i][j]][k];
                     }
                 }
                 else
                 {
-                    p[i][col[j]-1] = 'Q';
-                    p[i][col[j]] = 'w';
-                    p[i][col[j]+1] = 'Q';
+                    p[row[i]][col[j]-1] = 'Q';
+                    p[row[i]][col[j]] = 'w';
+                    p[row[i]][col[j]+1] = 'Q';
                 }
             }
         }
     }
 }
-
