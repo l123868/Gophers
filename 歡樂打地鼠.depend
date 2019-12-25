@@ -1,0 +1,39 @@
+# depslib dependency file v1.0
+1434884455 source:c:\users\latifah\desktop\40143210s-¬f¶®ÄÖ\40143210s-¬f¶®ÄÖ\source\game.cpp
+
+1434885379 c:\users\latifah\desktop\40143210s-¬f¶®ÄÖ\40143210s-¬f¶®ÄÖ\source\game.h
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<conio.h>
+	<windows.h>
+
+1434875913 source:c:\users\latifah\desktop\40143210s-¬f¶®ÄÖ\40143210s-¬f¶®ÄÖ\source\main.cpp
+	"game.h"
+
+1434800119 source:c:\users\123\desktop\source\source\main.cpp
+	"game.h"
+
+1434800285 c:\users\123\desktop\source\source\game.h
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<conio.h>
+	<windows.h>
+
+1434800391 source:c:\users\123\desktop\source\source\game.cpp
+	"game.h"
+
+1434889361 source:c:\users\latifah\downloads\source123\source123\source\game.cpp
+	"game.h"
+
+1434800285 c:\users\latifah\downloads\source123\source123\source\game.h
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<conio.h>
+	<windows.h>
+
+1434800119 source:c:\users\latifah\downloads\source123\source123\source\main.cpp
+	"game.h"
+
